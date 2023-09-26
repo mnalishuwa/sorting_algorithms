@@ -11,10 +11,11 @@
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current_node, *backtrack, *tail, *temp = NULL;
+	listint_t *current_node, *tail, *temp = NULL;
 
 	if (list == NULL || *list == NULL || (*list)->next == NULL)
 		return;
+
 	current_node = (*list)->next;
 	tail = *list;
 
@@ -23,27 +24,12 @@ void insertion_sort_list(listint_t **list)
 		if (tail->n > current_node->n)
 		{
 			temp = current_node;
-			tail->next = current_node->next;
-			if (current_node->next)
-				current_node->next->prev = tail;
 			current_node = current_node->next;
-			backtrack = tail->prev;
-			while (backtrack && backtrack->n > temp->n)
+			while (temp->prev && temp->prev->n > temp->n)
 			{
-				backtrack = backtrack->prev;
-			}
-			if (backtrack == NULL)
-			{
-				add_node(list, temp);
+				temp = swap(list, temp->prev, temp);
 				print_list(*list);
-				continue;
 			}
-			temp->next = backtrack->next;
-			temp->prev = backtrack;
-			if (backtrack->next)
-				backtrack->next->prev = temp;
-			backtrack->next = temp;
-			print_list(*list);
 		}
 		else
 		{
@@ -54,31 +40,35 @@ void insertion_sort_list(listint_t **list)
 }
 
 /**
- * add_node - add node at the beginning of list
- * Description: add node to start of doubly-linked list
+ * swap - swaps two adjacent nodes
+ * Description: swaps two adjacent nodes in a
+ * doubly-linked list
  *
- * @head: pointer to first node in the list
- * @new_node: node to add
+ * @head: pointer to list structure incase changing first node
+ * @left: pointer to left-most node
+ * @right: pointer to right-most node
  *
- * Return: listint *, pointer to new node
+ * Return: listint_t node, right-most node from the swap
  */
-listint_t *add_node(listint_t **head, listint_t *new_node)
+listint_t *swap(listint_t **head, listint_t *left, listint_t *right)
 {
-	if (new_node == NULL || head == NULL)
+	listint_t *__attribute((unused))tmp = *head;
+
+	if (left == NULL || right == NULL || left->next
+	    != right || right->prev != left)
 		return (NULL);
 
-	new_node->prev = NULL;
+	right->prev = left->prev;
+	left->next = right->next;
+	right->next = left;
+	left->prev = right;
 
-	if (*head == NULL)
-	{
-		*head = new_node;
-		new_node->next = NULL;
-		return (new_node);
-	}
+	if (right->prev)
+		right->prev->next = right;
 
-	new_node->next = *head;
-	(*head)->prev = new_node;
-	*head = new_node;
-
-	return (new_node);
+	if (left->next)
+		left->next->prev = left;
+	if (*head == left)
+		*head = right;
+	return (right);
 }
