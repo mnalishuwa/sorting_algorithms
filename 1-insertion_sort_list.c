@@ -11,20 +11,21 @@
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *current_node = *list, *backtrack, *tail, *temp;
+	listint_t *current_node, *backtrack, *tail, *temp = NULL;
 
-	tail = current_node;
-	temp = current_node;
-
-	if (current_node == NULL || current_node->next == NULL)
+	if (list == NULL || *list == NULL || (*list)->next == NULL)
 		return;
+	current_node = (*list)->next;
+	tail = *list;
 
 	while (current_node)
 	{
 		if (tail->n > current_node->n)
 		{
 			temp = current_node;
-			tail->next = temp->next;
+			tail->next = current_node->next;
+			if (current_node->next)
+				current_node->next->prev = tail;
 			current_node = current_node->next;
 			backtrack = tail->prev;
 			while (backtrack && backtrack->n > temp->n)
@@ -57,7 +58,7 @@ void insertion_sort_list(listint_t **list)
  * Description: add node to start of doubly-linked list
  *
  * @head: pointer to first node in the list
- * @new_node: node
+ * @new_node: node to add
  *
  * Return: listint *, pointer to new node
  */
