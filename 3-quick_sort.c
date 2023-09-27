@@ -12,7 +12,8 @@
  */
 void quick_sort(int *array, size_t size)
 {
-	sort(array, 1, size - 1);
+	if (array && size >= 2)
+		sort(array, 0, size - 1, size);
 }
 
 /**
@@ -22,13 +23,14 @@ void quick_sort(int *array, size_t size)
  * @array: int array pointer
  * @hi: int size
  * @lo: int lo
+ * @size: array size
  *
  * Return: size_t, pivot
  */
-size_t partition(int *array, size_t lo, size_t hi)
+size_t partition(int *array, int lo, int hi, size_t size)
 {
 	int pivot_element;
-	size_t idx, j_idx;
+	int idx, j_idx, swapped;
 
 	pivot_element = array[hi];
 	idx = lo - 1;
@@ -37,13 +39,15 @@ size_t partition(int *array, size_t lo, size_t hi)
 	{
 		if (array[j_idx] <= pivot_element)
 		{
-			idx += 1;
-			swap_ints((array + idx), (array + j_idx));
-			print_array(array, hi + 1);
+			idx++;
+			swapped = swap_ints((array + idx), (array + j_idx));
+			if (swapped)
+				print_array(array, size);
 		}
 	}
-	swap_ints((array + idx + 1), (array + hi));
-	print_array(array, hi + 1);
+	swapped = swap_ints((array + idx + 1), (array + hi));
+	if (swapped)
+		print_array(array, size);
 	return (idx + 1);
 }
 
@@ -54,18 +58,19 @@ size_t partition(int *array, size_t lo, size_t hi)
  * @array: int array
  * @hi: int
  * @lo: int
+ * @size: array size
  *
  * Return: void
  */
-void sort(int *array, size_t lo, size_t hi)
+void sort(int *array, int lo, int hi, size_t size)
 {
 	size_t pivot;
 
 	if (lo < hi)
 	{
-		pivot = partition(array, lo, hi);
-		sort(array, lo, pivot - 1);
-		sort(array, pivot + 1, hi);
+		pivot = partition(array, lo, hi, size);
+		sort(array, lo, pivot - 1, size);
+		sort(array, pivot + 1, hi, size);
 	}
 }
 
@@ -79,12 +84,17 @@ void sort(int *array, size_t lo, size_t hi)
  *
  * Return: void
  */
-void swap_ints(int *x, int *y)
+int swap_ints(int *x, int *y)
 {
+	int swapped = 0;
+
 	if (x != y)
 	{
 		*x = *x ^ *y;
 		*y = *x ^ *y;
 		*x = *x ^ *y;
+		swapped = 1;
 	}
+
+	return (swapped);
 }

@@ -23,12 +23,13 @@ typedef struct listint_s
 listint_t *add_node(listint_t **head, listint_t *new_node);
 void print_array(const int *array, size_t size);
 void print_list(const listint_t *list);
-void sort(int *array, size_t lo, size_t hi);
+void sort(int *array, int lo, int hi, size_t size);
 listint_t *swap(listint_t **head, listint_t *left, listint_t *right);
-void swap_ints(int *x, int *y);
+int swap_ints(int *x, int *y);
 
 void bubble_sort(int *array, size_t size);
 void insertion_sort_list(listint_t **list);
+size_t partition(int *array, int lo, int hi, size_t size);
 void selection_sort(int *array, size_t size);
 void quick_sort(int *array, size_t size);
 
