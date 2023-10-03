@@ -41,7 +41,7 @@ void shell_sort(int *array, size_t size)
 		return;
 
 	n = size;
-	k = knuth_log(n + 1); /* find knuth number >= size/2 */
+	k = knuth_log(n + 1) + 1; /* find knuth number >= size/2 */
 
 	for (; k >= 1; k--)
 	{
