@@ -1,7 +1,6 @@
 #ifndef SORT_H
 #define SORT_H
 
-#include <math.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,6 +21,10 @@ typedef struct listint_s
 } listint_t;
 
 listint_t *add_node(listint_t **head, listint_t *new_node);
+size_t knuth_log(size_t x);
+/* double log(double x); */
+/* int pow(int x, int y); */
+int _pow_recursion(int x, int y);
 void print_array(const int *array, size_t size);
 void print_list(const listint_t *list);
 listint_t *swap(listint_t **head, listint_t *left, listint_t *right);
